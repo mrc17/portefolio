@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import PublicLayout from '../../layouts/PublicLayout.astro';
+import ProjectLogo from '../../components/ProjectLogo.astro';
+import TechTag from '../../components/TechTag.astro';
+import { personId } from '../../data/profile';
+
+export async function getStaticPaths() {
+    const projects = await getCollection('projects');
+    return projects.map((project) => ({
+        params: { slug: project.id },
+        props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, sector, techStack, demoUrl, repoUrl } = project.data;
+
+const relatedExpertises = (await getCollection('expertises')).filter((expertise) =>
+    expertise.data.projects.some((ref) => ref.id === project.id)
+);
+
+const schema = [
+    {
+        '@type': 'CreativeWork',
+        name: title,
+        description: summary,
+        url: new URL(Astro.url.pathname, Astro.site).href,
+        creator: { '@id': personId(Astro.site!) },
+        keywords: techStack.join(', '),
+        inLanguage: 'fr',
+        ...(sector && { genre: sector }),
+    },
+];
+---
+
+<PublicLayout title={title} description={summary} ogType="article" schema={schema}>
+    <article class="mx-auto max-w-3xl px-6 py-16">
+        <a href="/projets/" class="font-mono text-sm text-slate-400 transition-colors hover:text-accent">&#8592; projets</a>
+        <div class="mt-6">
+            <ProjectLogo slug={project.id} title={title} class="h-16 w-16" size={64} />
+        </div>
+        {sector && (
+            <p class="mt-4 font-mono text-xs uppercase tracking-wide text-slate-400">{sector}</p>
+        )}
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-white">{title}</h1>
+        <p class="mt-4 text-lg text-slate-400">{summary}</p>
+
+        {techStack.length > 0 && (
+            <div class="mt-6 flex flex-wrap gap-2">
+                {techStack.map((tech) => (
+                    <TechTag tech={tech} />
+                ))}
+            </div>
+        )}
+
+        <div class="prose prose-invert prose-slate mt-10 max-w-none prose-a:text-accent">
+            <Content />
+        </div>
+
+        {relatedExpertises.length > 0 && (
+            <p class="mt-10 text-sm text-slate-400">
+                Expertises mobilisées :{' '}
+                {relatedExpertises.map((expertise, index) => (
+                    <>
+                        {index > 0 && ' · '}
+                        <a href={`/expertises/${expertise.id}/`} class="text-accent transition-colors hover:text-accent-soft">
+                            {expertise.data.title}
+                        </a>
+                    </>
+                ))}
+            </p>
+        )}
+
+        {(demoUrl || repoUrl) && (
+            <div class="mt-10 flex flex-wrap gap-4 border-t border-edge pt-8">
+                {demoUrl && (
+                    <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="btn-primary">
+                        Visiter le site
+                    </a>
+                )}
+                {repoUrl && (
+                    <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="btn-ghost">
+                        Voir le dépôt
+                    </a>
+                )}
+            </div>
+        )}
+    </article>
+</PublicLayout>

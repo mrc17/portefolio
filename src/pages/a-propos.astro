@@ -1,0 +1,165 @@
+---
+import { Image } from 'astro:assets';
+import PublicLayout from '../layouts/PublicLayout.astro';
+import TechTag from '../components/TechTag.astro';
+import photo from '../assets/axel-toure.jpg';
+import { personId, profile } from '../data/profile';
+
+const schema = [
+    {
+        '@type': 'ProfilePage',
+        url: new URL(Astro.url.pathname, Astro.site).href,
+        name: 'À propos — Touré WAOGNEINLIN Axel',
+        inLanguage: 'fr',
+        mainEntity: { '@id': personId(Astro.site!) },
+    },
+];
+
+const experience = [
+    {
+        role: 'Développeur Full-Stack & Consultant',
+        org: 'Systèmes électoraux — clients confidentiels',
+        period: 'Mai 2024 — présent',
+        description:
+            "Conception et développement d'applications de systèmes électoraux pour des partis politiques, des organisations et des associations : gestion des membres et des structures, opérations de terrain et remontée d'informations. Clients, pays et détails techniques confidentiels.",
+    },
+    {
+        role: 'Développeur Backend & Consultant',
+        org: 'EdenCorporate',
+        period: 'Mars 2023 — présent',
+        description:
+            "Développement d'APIs robustes et d'applications web performantes, sécurisation de bases de données relationnelles, avant-vente technique. Projet clé : ingénierie et développement du SIM ERP.",
+    },
+    {
+        role: "Professeur d'Informatique",
+        org: 'ETIC, Groupe Bowl, UTA',
+        period: 'Juin 2021 — présent',
+        description:
+            "Enseignement de l'architecture logicielle, de la conception d'APIs REST, du développement Full-Stack et du développement mobile cross-platform (React Native).",
+    },
+    {
+        role: 'Développeur Full-Stack Freelance',
+        org: 'Clients multiples (K-SIRA, TBC Energie, Sutana, MT Luxury, +10 autres)',
+        period: 'Janvier 2022 — présent',
+        description:
+            "Conception et livraison d'applications web et mobiles de bout en bout : analyse des besoins, architecture technique, développement, tests, déploiement et maintenance.",
+    },
+    {
+        role: 'Développeur Full-Stack & Consultant',
+        org: 'Médiature de la République',
+        period: 'Juin 2022 — Mars 2023',
+        description:
+            "Conception et déploiement d'applications web et mobiles pour moderniser les services de l'institution, de l'analyse des besoins à la rédaction des spécifications techniques.",
+    },
+    {
+        role: 'Développeur Backend & Intégrateur',
+        org: 'AS Numeris',
+        period: 'Janvier 2021 — Février 2022',
+        description:
+            "Création d'APIs robustes, intégration de solutions tierces, sécurisation et optimisation de bases de données relationnelles, configuration d'environnements serveurs.",
+    },
+];
+
+const skills = [
+    'Laravel',
+    'React',
+    'React Native',
+    'Java',
+    'Spring Boot',
+    'Node.js',
+    'Python',
+    'Drupal',
+    'MySQL / PostgreSQL',
+    'Docker',
+    'CI/CD',
+    'Intégration de paiements (mobile money, PI-SPI)',
+    'IA — reconnaissance faciale, vocale, empreinte',
+    'Automatisation & bots',
+    'Tests automatisés (Selenium, Playwright)',
+    'Audit OWASP',
+    'Linux',
+    'Tailwind CSS',
+];
+---
+
+<PublicLayout
+    title="À propos"
+    description="Parcours, expérience et compétences de Touré WAOGNEINLIN Axel, développeur Full Stack et Lead Tech à Abidjan."
+    ogType="profile"
+    schema={schema}
+>
+    <section class="mx-auto max-w-3xl px-6 py-16">
+        <div class="flex items-center gap-6">
+            <div class="relative shrink-0">
+                <div class="absolute -inset-1.5 rounded-full bg-accent/10 blur-lg"></div>
+                <Image
+                    src={photo}
+                    alt="Touré WAOGNEINLIN Axel"
+                    class="relative h-24 w-24 rounded-full object-cover ring-2 ring-accent/40"
+                    width={96}
+                    height={96}
+                    densities={[1.5, 2]}
+                />
+            </div>
+            <div>
+                <p class="eyebrow">// à propos</p>
+                <h1 class="mt-1 text-3xl font-bold tracking-tight text-white">{profile.fullName}</h1>
+                <p class="mt-1 text-slate-400">
+                    Développeur Full Stack &amp; Lead Tech, 5+ ans d'expérience — Abidjan, Côte d'Ivoire
+                </p>
+            </div>
+        </div>
+
+        <div class="prose prose-invert prose-slate mt-10 max-w-none">
+            <p>
+                Je conçois et développe des applications web et mobiles pour des
+                institutions publiques, des entreprises et des clients freelance,
+                avec une attention particulière portée à l'architecture logicielle,
+                à la qualité du code et à la sécurité des systèmes. Mon expérience
+                couvre des plateformes critiques (systèmes électoraux, ERP, services
+                publics) ainsi que des projets web et mobiles pour des clients variés.
+            </p>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-4">
+            <a href="/cv-axel-toure.pdf" download class="btn-primary">
+                Télécharger mon CV (PDF)
+            </a>
+            <a href="/contact/" class="btn-ghost">Me contacter</a>
+        </div>
+
+        <h2 class="mt-12 text-xl font-semibold text-white">Formation</h2>
+        <ul class="mt-4 space-y-3 text-slate-300">
+            <li>
+                <p class="font-medium text-white">Licence option Génie Logiciel</p>
+                <p class="font-mono text-sm text-slate-400">Groupe ETIC, Abidjan Yopougon — Mai 2021</p>
+            </li>
+            <li>
+                <p class="font-medium text-white">Diplôme Technique Informatique</p>
+                <p class="font-mono text-sm text-slate-400">Groupe ETIC, Abidjan Yopougon — Août 2020</p>
+            </li>
+        </ul>
+
+        <h2 class="mt-12 text-xl font-semibold text-white">Expérience professionnelle</h2>
+        <div class="mt-6 space-y-8 border-l border-edge pl-6">
+            {experience.map((item) => (
+                <div class="relative">
+                    <span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-base"></span>
+                    <p class="font-medium text-white">{item.role} · {item.org}</p>
+                    <p class="font-mono text-xs text-slate-400">{item.period}</p>
+                    <p class="mt-2 text-slate-400">{item.description}</p>
+                </div>
+            ))}
+        </div>
+
+        <h2 class="mt-12 text-xl font-semibold text-white">Compétences</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+            {skills.map((skill) => (
+                <TechTag tech={skill} />
+            ))}
+        </div>
+
+        <h2 class="mt-12 text-xl font-semibold text-white">Langues</h2>
+        <p class="mt-4 text-slate-400">Français (natif), Anglais</p>
+    </section>
+</PublicLayout>

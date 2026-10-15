@@ -1,0 +1,27 @@
+// Nom de techno affiché -> nom de l'icône Simple Icons.
+// Les technos absentes ici s'affichent en texte seul (pas d'icône).
+export const techIcons: Record<string, string> = {
+    Laravel: 'laravel',
+    React: 'react',
+    'React Native': 'react',
+    'Vue.js': 'vuedotjs',
+    'Node.js': 'nodedotjs',
+    Python: 'python',
+    'Spring Boot': 'springboot',
+    Docker: 'docker',
+    'Tailwind CSS': 'tailwindcss',
+    WordPress: 'wordpress',
+    Drupal: 'drupal',
+    PHP: 'php',
+    Symfony: 'symfony',
+    MySQL: 'mysql',
+    PostgreSQL: 'postgresql',
+    Selenium: 'selenium',
+    Playwright: 'playwright',
+    HTML: 'html5',
+    CSS: 'css',
+    JavaScript: 'javascript',
+    jQuery: 'jquery',
+    Bootstrap: 'bootstrap',
+    Odoo: 'odoo',
+};

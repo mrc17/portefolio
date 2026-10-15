@@ -1,0 +1,164 @@
+---
+import { Font, getImage } from 'astro:assets';
+import '../styles/global.css';
+import photo from '../assets/axel-toure.jpg';
+import { personId, profile, sameAs, websiteId } from '../data/profile';
+
+interface Props {
+    title: string;
+    description: string;
+    ogType?: 'website' | 'article' | 'profile';
+    schema?: Record<string, unknown>[];
+}
+
+const { title, description, ogType = 'website', schema = [] } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(Astro.url.pathname, site);
+const fullTitle = `${title} - ${profile.name}`;
+const ogImage = new URL((await getImage({ src: photo, format: 'jpg' })).src, site);
+
+const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebSite',
+            '@id': websiteId(site),
+            url: site.href,
+            name: profile.name,
+            inLanguage: 'fr',
+            publisher: { '@id': personId(site) },
+        },
+        {
+            '@type': 'Person',
+            '@id': personId(site),
+            name: profile.fullName,
+            alternateName: profile.name,
+            jobTitle: profile.jobTitle,
+            url: site.href,
+            image: ogImage.href,
+            email: `mailto:${profile.email}`,
+            telephone: profile.telephone,
+            contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                telephone: profile.telephone,
+                availableLanguage: ['French', 'English'],
+            },
+            address: {
+                '@type': 'PostalAddress',
+                addressLocality: profile.locality,
+                addressCountry: profile.countryCode,
+            },
+            alumniOf: { '@type': 'EducationalOrganization', name: profile.alumniOf },
+            knowsAbout: profile.knowsAbout,
+            ...(sameAs.length > 0 && { sameAs }),
+        },
+        ...schema,
+    ],
+};
+
+const jsonLd = JSON.stringify(graph).replace(/</g, '\\u003c');
+
+// Préchargement natif des pages au survol des liens (Chrome/Edge), sans JavaScript à télécharger.
+const speculationRules = JSON.stringify({
+    prefetch: [{ where: { href_matches: '/*' }, eagerness: 'moderate' }],
+});
+---
+
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#0b0f17" />
+        <title>{fullTitle}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <meta property="og:type" content={ogType} />
+        <meta property="og:site_name" content={profile.name} />
+        <meta property="og:locale" content="fr_FR" />
+        <meta property="og:title" content={fullTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary" />
+
+        <Font cssVariable="--font-figtree" preload={[{ weight: 400 }, { weight: 700 }]} />
+        <Font cssVariable="--font-jetbrains-mono" preload={[{ weight: 400 }]} />
+
+        <script is:inline type="application/ld+json" set:html={jsonLd} />
+
+        <script is:inline type="speculationrules" set:html={speculationRules} />
+
+        <script is:inline>
+            const revealReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function setupReveal() {
+                if (revealReduced || !('IntersectionObserver' in window)) return;
+                const io = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('is-visible');
+                                io.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+                );
+                // Seuls les blocs sous la ligne de flottaison sont masqués puis révélés au défilement :
+                // le contenu visible au chargement s'affiche sans attendre le JS (LCP).
+                document.querySelectorAll('.reveal:not(.reveal-pending)').forEach((el) => {
+                    if (el.getBoundingClientRect().top < window.innerHeight) return;
+                    el.classList.add('reveal-pending');
+                    io.observe(el);
+                });
+            }
+
+            function setupTypewriter() {
+                const el = document.querySelector('[data-typewriter]:not([data-typing])');
+                if (!el) return;
+                el.setAttribute('data-typing', '');
+                const full = el.getAttribute('data-text') || el.textContent;
+                el.setAttribute('data-text', full);
+                if (revealReduced) {
+                    el.textContent = full;
+                    return;
+                }
+                el.textContent = '';
+                let i = 0;
+                const type = () => {
+                    if (!el.isConnected) return;
+                    el.textContent = full.slice(0, i);
+                    if (i <= full.length) {
+                        i += 1;
+                        setTimeout(type, 55);
+                    }
+                };
+                type();
+            }
+
+            // Menu mobile (délégation d'événement)
+            document.addEventListener('click', (event) => {
+                const toggle = event.target.closest('#menu-toggle');
+                if (!toggle) return;
+                const menu = document.getElementById('mobile-menu');
+                if (!menu) return;
+                const hidden = menu.classList.contains('hidden');
+                menu.classList.toggle('hidden');
+                menu.classList.toggle('flex');
+                toggle.setAttribute('aria-expanded', String(hidden));
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                setupReveal();
+                setupTypewriter();
+            });
+        </script>
+    </head>
+    <body class="bg-base text-slate-200 antialiased">
+        <slot />
+    </body>
+</html>

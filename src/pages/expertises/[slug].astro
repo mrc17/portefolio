@@ -1,0 +1,69 @@
+---
+import { getCollection, getEntries } from 'astro:content';
+import PublicLayout from '../../layouts/PublicLayout.astro';
+import { personId, profile } from '../../data/profile';
+
+export async function getStaticPaths() {
+    const expertises = await getCollection('expertises');
+    return expertises.map((expertise) => ({
+        params: { slug: expertise.id },
+        props: { expertise },
+    }));
+}
+
+const { expertise } = Astro.props;
+const { title, seoTitle, description, intro, points } = expertise.data;
+const relatedProjects = await getEntries(expertise.data.projects);
+
+const schema = [
+    {
+        '@type': 'Service',
+        name: title,
+        serviceType: title,
+        description,
+        url: new URL(Astro.url.pathname, Astro.site).href,
+        provider: { '@id': personId(Astro.site!) },
+        areaServed: { '@type': 'Country', name: profile.countryName },
+    },
+];
+---
+
+<PublicLayout title={seoTitle} description={description} schema={schema}>
+    <section class="mx-auto max-w-3xl px-6 py-16">
+        <p class="eyebrow">// expertise</p>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-white">{title}</h1>
+        <p class="mt-4 text-lg text-slate-400">{description}</p>
+
+        {intro && <p class="mt-6 text-slate-300">{intro}</p>}
+
+        {points && points.length > 0 && (
+            <ul class="mt-8 space-y-3">
+                {points.map((point) => (
+                    <li class="flex items-start gap-3 text-slate-300">
+                        <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"></span>
+                        <span>{point}</span>
+                    </li>
+                ))}
+            </ul>
+        )}
+
+        {relatedProjects.length > 0 && (
+            <>
+                <h2 class="mt-12 text-xl font-semibold text-white">Réalisations associées</h2>
+                <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                    {relatedProjects.map((project) => (
+                        <a href={`/projets/${project.id}/`} class="card card-lift block p-5">
+                            <h3 class="font-semibold text-white">{project.data.title}</h3>
+                            <p class="mt-2 text-sm text-slate-400">{project.data.summary}</p>
+                        </a>
+                    ))}
+                </div>
+            </>
+        )}
+
+        <div class="mt-12 flex flex-wrap gap-4">
+            <a href="/contact/" class="btn-primary">Discuter de votre projet</a>
+            <a href="/projets/" class="btn-ghost">Toutes les réalisations</a>
+        </div>
+    </section>
+</PublicLayout>

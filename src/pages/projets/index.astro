@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import PublicLayout from '../../layouts/PublicLayout.astro';
+import ProjectLogo from '../../components/ProjectLogo.astro';
+import TechTag from '../../components/TechTag.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const sections = [
+    {
+        title: 'Produits en ligne',
+        intro: 'Applications et plateformes en production, consultables directement.',
+        items: projects.filter((p) => p.data.visibility === 'public'),
+    },
+    {
+        title: 'Missions et études de cas',
+        intro: "Projets réalisés pour des institutions et des entreprises, présentés sans données confidentielles.",
+        items: projects.filter((p) => p.data.visibility === 'case_study'),
+    },
+];
+---
+
+<PublicLayout
+    title="Projets"
+    description="Réalisations d'Axel Touré : SaaS, marketplaces, billetterie, e-commerce et plateformes métier développés en Côte d'Ivoire."
+>
+    <section class="mx-auto max-w-5xl px-6 py-16">
+        <p class="eyebrow">// portfolio</p>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-white">Projets</h1>
+        <p class="mt-3 max-w-2xl text-slate-400">
+            {projects.length} réalisations : produits en ligne et missions pour des
+            institutions et des entreprises.
+        </p>
+
+        {sections.map((section) => (
+            <div class="mt-14">
+                <h2 class="text-xl font-semibold text-white">{section.title}</h2>
+                <p class="mt-1 text-sm text-slate-400">{section.intro}</p>
+
+                <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                    {section.items.map((project, i) => (
+                        <a
+                            href={`/projets/${project.id}/`}
+                            class="reveal card card-lift block p-6"
+                            style={`--reveal-delay: ${(i % 4) * 80}ms`}
+                        >
+                            <div class="flex items-start gap-4">
+                                <ProjectLogo slug={project.id} title={project.data.title} class="h-12 w-12" />
+                                <div>
+                                    {project.data.sector && (
+                                        <span class="font-mono text-xs uppercase tracking-wide text-slate-400">
+                                            {project.data.sector}
+                                        </span>
+                                    )}
+                                    <h3 class="text-lg font-semibold text-white">{project.data.title}</h3>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-sm text-slate-400">{project.data.summary}</p>
+                            {project.data.techStack.length > 0 && (
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    {project.data.techStack.map((tech) => (
+                                        <TechTag tech={tech} />
+                                    ))}
+                                </div>
+                            )}
+                        </a>
+                    ))}
+                </div>
+            </div>
+        ))}
+    </section>
+</PublicLayout>

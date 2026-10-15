@@ -1,0 +1,24 @@
+---
+import PublicLayout from '../layouts/PublicLayout.astro';
+---
+
+<PublicLayout
+    title="Page introuvable"
+    description="Cette page n'existe pas ou a été déplacée."
+>
+    <section class="mx-auto flex max-w-3xl flex-col items-start px-6 py-28">
+        <p class="eyebrow">// erreur 404</p>
+        <h1 class="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Page introuvable
+        </h1>
+        <p class="mt-4 max-w-md text-slate-400">
+            Le lien est peut-être erroné ou la page a été déplacée. Revenons sur
+            du solide.
+        </p>
+
+        <div class="mt-10 flex flex-wrap gap-4">
+            <a href="/" class="btn-primary">Retour à l'accueil</a>
+            <a href="/projets/" class="btn-ghost">Voir les projets</a>
+        </div>
+    </section>
+</PublicLayout>

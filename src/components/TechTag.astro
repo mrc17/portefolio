@@ -1,0 +1,16 @@
+---
+import { Icon } from 'astro-icon/components';
+import { techIcons } from '../lib/techIcons';
+
+interface Props {
+    tech: string;
+}
+
+const { tech } = Astro.props;
+const iconName = techIcons[tech];
+---
+
+<span class="chip inline-flex items-center gap-1.5">
+    {iconName && <Icon name={`simple-icons:${iconName}`} class="h-3.5 w-3.5" aria-hidden="true" />}
+    {tech}
+</span>

@@ -1,0 +1,107 @@
+[
+    {
+        "id": "developpement-laravel",
+        "title": "Développement Laravel",
+        "seoTitle": "Développeur Laravel à Abidjan",
+        "description": "Conception et développement d'applications web sur mesure avec Laravel : API, back-office, intégrations métier.",
+        "intro": "Laravel est au cœur de la plupart de mes projets : SaaS, marketplaces, ERP et plateformes métier. Je conçois des applications robustes, structurées et faciles à faire évoluer, du modèle de données jusqu'à l'interface, en passant par l'API et l'administration.",
+        "points": [
+            "API REST et back-offices sur mesure",
+            "Authentification, rôles et permissions (RBAC)",
+            "Intégration de paiements mobile money (Wave, Orange Money, MTN) et de services tiers",
+            "Exports PDF/Excel, tableaux de bord et reporting",
+            "Tests automatisés, optimisation des performances et déploiement"
+        ],
+        "projects": ["blazz", "treiize-graya", "treiize-tickets", "dimatrans", "trakmalo", "sim-erp"]
+    },
+    {
+        "id": "developpement-react",
+        "title": "Développement React",
+        "seoTitle": "Développeur React freelance",
+        "description": "Interfaces modernes et réactives avec React, intégrées à des architectures Laravel ou API existantes.",
+        "intro": "Je développe des interfaces web réactives avec React (souvent via Inertia.js sur une base Laravel) ainsi que des applications mobiles cross-platform avec React Native. L'objectif : une expérience fluide, cohérente et accessible, reliée proprement au back-end.",
+        "points": [
+            "Interfaces web réactives (React + Inertia.js)",
+            "Applications mobiles cross-platform (React Native / Expo)",
+            "Intégration d'API, gestion d'état et temps réel",
+            "Composants réutilisables et design system cohérent",
+            "Performances, responsive et accessibilité"
+        ],
+        "projects": ["blazz", "treiize-graya", "treiize-tickets", "trakmalo", "erudio", "systemes-electoraux"]
+    },
+    {
+        "id": "integration-paiements",
+        "title": "Intégration de paiements",
+        "seoTitle": "Intégration d'API de paiement — mobile money & PI-SPI",
+        "description": "Intégration de solutions de paiement pour applications web et mobiles : mobile money, cartes bancaires et paiement instantané régional (PI-SPI / BCEAO).",
+        "intro": "J'intègre les moyens de paiement adaptés au marché ouest-africain dans les applications e-commerce, de billetterie et les plateformes métier : mobile money, cartes bancaires et l'infrastructure de paiement instantané de la région.",
+        "points": [
+            "Mobile money : Wave, Orange Money, MTN, Moov",
+            "Paiement par carte bancaire",
+            "PI-SPI : Système de Paiement Instantané, infrastructure régionale de la BCEAO",
+            "Webhooks, réconciliation et sécurisation des transactions",
+            "Parcours de paiement fiables (e-commerce, billetterie, abonnements)"
+        ],
+        "projects": ["treiize-tickets", "treiize-outlets", "medine", "treiize-graya"]
+    },
+    {
+        "id": "intelligence-artificielle",
+        "title": "Intelligence artificielle",
+        "seoTitle": "Développement IA — reconnaissance faciale, vocale, empreinte",
+        "description": "Développement de solutions d'IA de reconnaissance (faciale, vocale, empreinte digitale) intégrées à des applications métier.",
+        "intro": "Je conçois et j'intègre des briques d'intelligence artificielle de reconnaissance biométrique — visage, voix et empreinte digitale — au sein d'applications métier, pour l'identification et le contrôle d'accès.",
+        "points": [
+            "Reconnaissance faciale",
+            "Reconnaissance vocale",
+            "Reconnaissance d'empreinte digitale",
+            "Intégration de modèles d'IA dans des applications web et mobiles",
+            "Extraction et structuration automatique de données à partir d'images"
+        ],
+        "projects": ["securite-nationale", "k-sira", "trakmalo"]
+    },
+    {
+        "id": "automatisation-tests",
+        "title": "Automatisation & tests",
+        "seoTitle": "Automatisation et tests d'applications (Selenium, Playwright)",
+        "description": "Automatisation de tâches et tests automatisés d'applications web et mobiles avec Selenium et Playwright.",
+        "intro": "Je développe des bots d'automatisation pour fiabiliser les tâches répétitives, et je mets en place des tests automatisés pour garantir la qualité des applications avant leur mise en production.",
+        "points": [
+            "Tests automatisés end-to-end (Selenium, Playwright)",
+            "Bots d'automatisation de tâches",
+            "Automatisation du traitement de données (fichiers, images)",
+            "Scénarios de test et vérification des parcours critiques",
+            "Intégration des tests dans un pipeline CI/CD"
+        ],
+        "projects": ["automatisation-excel", "trakmalo"]
+    },
+    {
+        "id": "architecture-logicielle",
+        "title": "Architecture logicielle",
+        "seoTitle": "Architecte logiciel Laravel React",
+        "description": "Conception d'architectures maintenables pour plateformes métier : structuration du code, choix techniques, scalabilité.",
+        "intro": "Au-delà du code, je conçois des architectures pensées pour durer : séparation claire des responsabilités, modélisation de données solide et choix techniques adaptés à la charge réelle. J'interviens aussi en conseil sur des projets existants pour les structurer et les fiabiliser.",
+        "points": [
+            "Structuration du code maintenable (domaines, services, couches)",
+            "Conception d'API et modélisation de données",
+            "Choix techniques, scalabilité et interopérabilité",
+            "Revue de code et bonnes pratiques d'équipe",
+            "Documentation technique et transfert de compétences"
+        ],
+        "projects": ["treiize-graya", "blazz", "systemes-electoraux", "sim-erp", "diving-race"]
+    },
+    {
+        "id": "securite-applicative",
+        "title": "Sécurité applicative",
+        "seoTitle": "Audit et sécurisation d'applications web",
+        "description": "Audit de sécurité, durcissement d'API et bonnes pratiques de sécurisation pour applications web.",
+        "intro": "La sécurité est intégrée à ma façon de développer, et je la propose aussi en mission dédiée. J'audite les applications web et leurs API, j'identifie les failles courantes et je mets en place les protections adaptées, en m'appuyant sur les référentiels reconnus comme l'OWASP.",
+        "points": [
+            "Audit de sécurité selon l'OWASP Top 10",
+            "Durcissement des API et de l'authentification",
+            "Gestion des secrets, des accès et des sessions",
+            "Revue de configuration et de déploiement",
+            "Recommandations priorisées et bonnes pratiques"
+        ],
+        "projects": ["systemes-electoraux", "sim-erp", "gestion-stock-mediature"]
+    }
+]

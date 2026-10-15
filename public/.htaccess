@@ -1,0 +1,60 @@
+# Page d'erreur 404 personnalisée
+ErrorDocument 404 /404.html
+
+# Empêcher le listing du contenu des dossiers
+Options -Indexes
+
+# Accents corrects dans llms.txt et robots.txt
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .txt .json .xml .css .js
+
+# En-têtes de sécurité HTTP
+<IfModule mod_headers.c>
+    # Empêche l'affichage du site dans une iframe (anti-clickjacking)
+    Header always set X-Frame-Options "DENY"
+    # Empêche le navigateur de deviner le type MIME (anti-sniffing)
+    Header always set X-Content-Type-Options "nosniff"
+    # Limite les informations de référent envoyées aux autres sites
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # Désactive les API navigateur que le site n'utilise pas
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    # Force HTTPS pendant un an (effectif une fois le certificat SSL actif)
+    Header always set Strict-Transport-Security "max-age=31536000"
+    # Politique de sécurité du contenu : n'autorise que les ressources du site + l'envoi du formulaire vers Formspree
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+</IfModule>
+
+# Une seule adresse canonique : https://axeltoure.com (sans www)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# Compression (le HTML l'est déjà, pas le CSS/JS/SVG/JSON)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml text/markdown
+    AddOutputFilterByType DEFLATE application/javascript text/javascript application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml image/x-icon
+</IfModule>
+
+# Cache navigateur
+<IfModule mod_headers.c>
+    # Fichiers générés par Astro : nom versionné (hash), donc immuables
+    <If "%{REQUEST_URI} =~ m#^/_astro/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+    <Else>
+        <FilesMatch "\.(ico|svg|pdf)$">
+            Header set Cache-Control "public, max-age=604800"
+        </FilesMatch>
+        <FilesMatch "\.(html|txt|xml|json)$">
+            Header set Cache-Control "public, max-age=0, must-revalidate"
+        </FilesMatch>
+    </Else>
+</IfModule>

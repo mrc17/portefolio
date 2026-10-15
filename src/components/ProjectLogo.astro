@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import { logos } from '../lib/logos';
+
+interface Props {
+    slug: string;
+    title: string;
+    class?: string;
+    /** Taille d'affichage en px (48 sur les cartes, 64 sur la fiche projet). */
+    size?: number;
+}
+
+const { slug, title, class: className = 'h-12 w-12', size = 48 } = Astro.props;
+const logo = logos[slug];
+
+// Image dimensionnée pour l'affichage réel ; les variantes 1,5x/2x couvrent le retina.
+const logoWidth = logo ? Math.min(size, logo.width) : 0;
+const logoHeight = logo ? Math.round((logoWidth * logo.height) / logo.width) : 0;
+
+const initials =
+    title
+        .replace(/[^\p{L}\p{N} ]/gu, '')
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((w) => w[0])
+        .join('')
+        .toUpperCase() || title.slice(0, 2).toUpperCase();
+
+const palette = [
+    'bg-teal-500/15 text-teal-300 border border-teal-500/30',
+    'bg-sky-500/15 text-sky-300 border border-sky-500/30',
+    'bg-violet-500/15 text-violet-300 border border-violet-500/30',
+    'bg-amber-500/15 text-amber-300 border border-amber-500/30',
+    'bg-rose-500/15 text-rose-300 border border-rose-500/30',
+];
+let hash = 0;
+for (const ch of slug) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+const bg = palette[hash % palette.length];
+---
+
+{
+    logo ? (
+        <Image
+            src={logo}
+            alt={`Logo ${title}`}
+            width={logoWidth}
+            height={logoHeight}
+            densities={[1.5, 2]}
+            quality={70}
+            class={`${className} shrink-0 rounded-lg border border-gray-100 bg-white object-contain p-1`}
+        />
+    ) : (
+        <div
+            class={`${className} ${bg} flex shrink-0 items-center justify-center rounded-lg font-mono text-sm font-semibold`}
+            aria-hidden="true"
+        >
+            {initials}
+        </div>
+    )
+}
